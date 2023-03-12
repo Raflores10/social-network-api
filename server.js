@@ -1,8 +1,16 @@
-const User = require('./user');
+const express = require('express');
+const db = require('./config/connection');
+const routes = require('./routes');
 
-const Thought = require('./thought');
+const PORT = process.env.PORT || 3002;
+const app = express();
 
-const Reaction = require('./reaction');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(routes);
 
-
-module.exports = { User, Thought, Reaction};
+db.once('open', () => {
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}!`);
+  });
+});
